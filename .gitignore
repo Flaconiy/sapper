@@ -32,7 +32,7 @@
 *.app
 
 config.h
-libs.h
+
 *.qbs
 *.qbs.user
 *.autosave
