@@ -4,16 +4,14 @@
 
 #include <vector>
 #include <functional>
+#include <iostream>
 
 #include "libs.h"
-
-
 
 //class Cell_vector : private Graph_lib::Vector_ref<Cell>
 //{
 //  // TODO
 //};
-
 template<class T> class Vector_ref_cl
 {
   std::vector<T*> v;
@@ -38,8 +36,6 @@ public:
   {
     v.clear();
     owned.clear();
-    v.resize(0);
-    owned.resize(0);
   }
 
   T& operator[] (int i)  { return *v.at(i); }

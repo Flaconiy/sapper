@@ -1,6 +1,7 @@
 ﻿#ifndef CELL_H
 #define CELL_H 1
 
+
 #include "libs.h"
 
 #include <string>
@@ -20,6 +21,7 @@ class Cell : public Button_resizable
 {
 public:
   Cell(Graph_lib::Point p, int size_, Graph_lib::Callback cb);
+  ~Cell() override;
 
   void attach (Graph_lib::Window &win) override;
   void set_img (std::string name);

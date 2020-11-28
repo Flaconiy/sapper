@@ -2,11 +2,10 @@
 #define SAPPER_CLOCK_SHAPE_H 1
 
 
-#include <string>
-#include <ctime>
-
 #include "libs.h"
 
+#include <string>
+#include <ctime>
 
 
 class Out_box_resizable : public Graph_lib::Out_box

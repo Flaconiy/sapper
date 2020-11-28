@@ -2,12 +2,11 @@
 #define MINER_H 1
 
 
+#include "libs.h"
 #include "constants.h"
 #include "cell.h"
 #include "clock_shape.h"
 #include "vector_ref_cl.h"
-
-#include "libs.h"
 
 #include <string>
 #include <tuple>
@@ -16,19 +15,22 @@
 
 enum class Image_type
 {
-  first_flag_sign=1,
-  second_flag_sign,
+  flag_sign=1,
   defeat,
   win
 };
 
+class Game_status{
+public:
+    Graph_lib::Image* units{nullptr};
+    Graph_lib::Image* dozens{nullptr};
+    Graph_lib::Image* status{nullptr};
+};
 
 class Sapper : public Graph_lib::Window
 {
 public:
   Sapper(Graph_lib::Point p);
-
-  void set_img(std::string, Image_type);
 
 private:
   unsigned int num_of_bombs{0};
@@ -36,7 +38,7 @@ private:
   int num_of_rows{size_easy};
   bool first_click{true};
 
-  Vector_ref_cl<Vector_ref_cl<Cell> > cells;
+  Vector_ref_cl<Vector_ref_cl<Cell> >* cells_p {new Vector_ref_cl<Vector_ref_cl<Cell> >};
   Button_resizable btn_quit;
   Button_resizable btn_new_game;
   Button_resizable btn_size_easy;
@@ -45,7 +47,9 @@ private:
   Graph_lib::Image* first_flag_counter{nullptr};
   Graph_lib::Image* second_flag_counter{nullptr};
   Clock_shape game_time;
+  Game_status output;
 
+  void set_output(int n, Image_type imgt);
   void end_game (int, int);
   void set_bombs (int n, int ii, int jj);
   void new_game (int n);
@@ -56,6 +60,7 @@ private:
   void update_cells_around (int, int);
   void open_area (int i, int j);
   void resize_window (int w, int h, int n);
+  Cell& at(int x, int y);
 
   static void cb_clicked(void* widget, void* win);
   static void cb_new_game(void* widget, void* win);

@@ -7,11 +7,18 @@ Button_resizable::Button_resizable (Graph_lib::Point p, int w, int h,
                                    Graph_lib::Callback cb)
   : Button{ p, w,h,label , cb }
 { }
+//Button_resizable::~Button_resizable(){
+//    delete pw;
+//}
 
 Cell::Cell (Graph_lib::Point p, int size, Graph_lib::Callback cb)
   : Button_resizable{ p, size, size,"", cb }
 {
   set_img(img_btn_pulled);
+}
+
+Cell::~Cell(){
+    if(img_ptr) delete img_ptr;
 }
 
 
@@ -23,7 +30,10 @@ void Cell::attach (Graph_lib::Window &win)
 
 void Cell::set_img (std::string name)
 {
-  if (img_ptr != nullptr) (*img_ptr).~Image();
+  if (img_ptr) {
+    delete img_ptr;
+    img_ptr = nullptr;
+  }
   img_ptr = new Graph_lib::Image(loc, name);
 }
 
