@@ -44,8 +44,9 @@ private:
   Button_resizable btn_size_easy;
   Button_resizable btn_size_normal;
   Button_resizable btn_size_hard;
-  Graph_lib::Image* first_flag_counter{nullptr};
-  Graph_lib::Image* second_flag_counter{nullptr};
+//  Graph_lib::Menu menu_new_game;
+//  Graph_lib::Image* first_flag_counter{nullptr};
+//  Graph_lib::Image* second_flag_counter{nullptr};
   Clock_shape game_time;
   Game_status output;
 

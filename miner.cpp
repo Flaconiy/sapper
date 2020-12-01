@@ -1,5 +1,6 @@
 ﻿#include "miner.h"
 #include "cell.h"
+#include "debug.h"
 
 #include <ctime>
 #include <iostream>
@@ -116,7 +117,8 @@ void Sapper::set_bombs (int num_of_bombs, int ii, int jj)
 }
 
 void Sapper::resize_window (int w, int h, int n)
-{
+{  std::cerr<<"Ok1!\n";
+
   resize(w, h);
   size_range(w, h, w, h);
 
@@ -138,6 +140,7 @@ void Sapper::resize_window (int w, int h, int n)
   game_time.resize(button_w, button_h);
   game_time.move(-game_time.loc.x + x_max()-(sidebar_w - button_w) / 2 - button_w,
                  -game_time.loc.y + margin_tb);
+  std::cerr<<"Ok2!\n";
 }
 
 void Sapper::new_game(int n)
@@ -150,21 +153,23 @@ void Sapper::new_game(int n)
   int ww{ cell_size*n + margin_lr + sidebar_w};
   resize_window(ww, hh, n);
   new_game_show();
-//  for(int i = 0; i < cells.size(); ++i){
-//      for(int j = 0; j < cells.size(); ++j){
-//          detach(cells[i][j]);
-////          delete cells[i][j].img_ptr;
-////          cells[i][j].img_ptr = nullptr;
+  for(int i = 0; i < cells.size(); ++i){
+      for(int j = 0; j < cells.size(); ++j){
+          detach(cells[i][j]);
+//          delete cells[i][j].img_ptr;
+//          cells[i][j].img_ptr = nullptr;
 //          (*cells[i][j].img_ptr).~Image();
-//      }
-//  }
+      }
+  }
 //  cells.clear();
-
   if(cells_p) {
       delete cells_p;
+      MARKER;
       cells_p = new Vector_ref_cl<Vector_ref_cl<Cell> >;
-  }
+      MARKER;
 
+  }
+  MARKER;
   for (int i { 0 }; i < n; ++i)
   {
     cells.push_back(new Vector_ref_cl<Cell>);
@@ -178,7 +183,9 @@ void Sapper::new_game(int n)
   if (n == size_normal) num_of_bombs = size_normal_bombs;
   if (n == size_hard)   num_of_bombs = size_hard_bombs;
 
+  MARKER;
   set_output(num_of_bombs, Image_type::flag_sign);
+  MARKER;
 }
 
 void Sapper::quit ()
@@ -219,14 +226,12 @@ void Sapper::clicked (void *widget)
     if (!c.is_flaged())
     {
       ++flags_counter;
-      c.set_img(img_btn_pulled);
-      attach(*c.img_ptr);
+      c.img_ptr.reset(img_btn_pulled);
     }
     else
     {
       --flags_counter;
-      c.set_img(img_flag);
-      attach(*c.img_ptr);
+      c.img_ptr.reset(img_flag);
     }
     set_output(flags_counter, Image_type::flag_sign);
   }
@@ -272,24 +277,20 @@ void Sapper::end_game (int i_, int j_)
       cells[i][j].set_open();
       if (i == i_ and j == j_)
       {
-        cells[i][j].set_img(img_bomb_explosed);
-        attach(*(cells[i][j].img_ptr));
+        cells[i][j].img_ptr.reset(img_bomb_explosed);
         continue;
       }
       if (cells[i][j].is_bombed())
       {
-        cells[i][j].set_img(img_bomb);
-        attach(*(cells[i][j].img_ptr));
+        cells[i][j].img_ptr.reset(img_bomb);
       }
       if (cells[i][j].is_flaged() && !(cells[i][j].is_bombed()))
       {
-        cells[i][j].set_img(img_error_bomb);
-        attach(*(cells[i][j].img_ptr));
+        cells[i][j].img_ptr.reset(img_error_bomb);
       }
       if (cells[i][j].is_flaged() and cells[i][j].is_bombed())
       {
-        cells[i][j].set_img(img_bomb_defused);
-        attach(*(cells[i][j].img_ptr));
+        cells[i][j].img_ptr.reset(img_bomb_defused);
       }
     }
   }
@@ -428,16 +429,14 @@ void Sapper::open_area (int i, int j)
     {
       if (cells[i][j].bombs_around >= 1 && cells[i][j].bombs_around <= 8)
       {
-        cells[i][j].set_img(img_lib + to_str(cells[i][j].bombs_around) + ".png");
+        cells[i][j].img_ptr.reset(img_lib + to_str(cells[i][j].bombs_around) + ".png");
       }
-      attach(*(cells[i][j].img_ptr));
       redraw();
       continue;
     }
     else
     {
-      cells[i][j].set_img(img_btn_pushed);
-      attach(*(cells[i][j].img_ptr));
+      cells[i][j].img_ptr.reset(img_btn_pushed);
     }
 
     if (i > 0)

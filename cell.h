@@ -6,6 +6,16 @@
 
 #include <string>
 
+class Image_ptr{
+private:
+    Graph_lib::Image* ptr { nullptr };
+    Graph_lib::Window* win_ptr { nullptr };
+public:
+    Image_ptr(Graph_lib::Point p, const std::string& path);
+    void reset(const std::string& path);
+    void attach(Graph_lib::Window& win);
+    ~Image_ptr();
+};
 
 class Button_resizable : public Graph_lib::Button
 {
@@ -21,10 +31,8 @@ class Cell : public Button_resizable
 {
 public:
   Cell(Graph_lib::Point p, int size_, Graph_lib::Callback cb);
-  ~Cell() override;
 
   void attach (Graph_lib::Window &win) override;
-  void set_img (std::string name);
 
   void set_bomb (bool bomb) { bombed = bomb; }
   void set_flag (bool flag) { flaged = flag; }
@@ -36,7 +44,7 @@ public:
 
   int bombs_around{ 0 }; // TODO: в отдельные методы
 
-  Graph_lib::Image* img_ptr { nullptr };
+  Image_ptr img_ptr;
 
 private:
   bool bombed{ false };

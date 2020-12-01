@@ -27,7 +27,13 @@ public:
     if (d) push_back(d);
   }
 
-  ~Vector_ref_cl ()  { for (unsigned int i = 0; i < owned.size(); ++i) delete owned[i]; }
+  ~Vector_ref_cl ()  {
+      for (unsigned int i = 0; i < owned.size(); ++i) {
+          std::cerr<<i<<" "<<owned[i]<<std::endl;
+          delete owned[i];
+      }
+      std::cerr<<std::endl;
+  }
 
   void push_back (T& s)  { v.push_back(&s); }
   void push_back (T* p)  { v.push_back(p); owned.push_back(p); }
